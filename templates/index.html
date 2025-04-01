@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Transcription & Sentiment Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #controls {
+            margin-top: 20px;
+        }
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 5px;
+        }
+        #timer {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            text-align: left;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #results h2 {
+            margin-bottom: 10px;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>Audio Transcription & Sentiment Analysis</h1>
+    <p>Click the button below to start recording your voice. The audio will be transcribed and analyzed for sentiment.</p>
+
+    <div id="controls">
+        <button id="record">Start Recording</button>
+        <button id="stop" style="display:none;">Stop Recording</button>
+        <p id="timer">Press 'Start Recording' to begin.</p>
+    </div>
+
+    {% if results %}
+<div id="results">
+    <h2>All Transcripts & Sentiment Results</h2>
+    {% for filename, content in results %}
+        <div style="margin: 20px auto; padding: 15px; background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 8px; max-width: 800px; text-align: left;">
+            <h4>{{ filename }}</h4>
+            <pre>{{ content }}</pre>
+        </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No analysis results yet. Upload an audio file to get started.</p>
+{% endif %}
+
+    
+
+    <script src="script.js"></script>
+</body>
+</html>
