@@ -3,71 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Transcription & Sentiment Analysis</title>
+    <title>Book Q&A App with Gemini + TTS</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 50px;
+            background-color: #f4f4f4;
         }
-        #controls {
-            margin-top: 20px;
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
         }
-        button {
+        #controls, form {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+        button, input[type="file"] {
             font-size: 16px;
-            padding: 10px 20px;
-            margin: 5px;
+            padding: 10px 15px;
+            margin: 10px 5px;
         }
         #timer {
             font-size: 18px;
             margin-top: 10px;
         }
         #results {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #f8f8f8;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            text-align: left;
+            margin-top: 40px;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+            text-align: left;
         }
-        #results h2 {
-            margin-bottom: 10px;
+        .result-block {
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
-        pre {
+        .result-block h4 {
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        .result-block pre {
             white-space: pre-wrap;
             word-wrap: break-word;
         }
     </style>
 </head>
 <body>
-    <h1>Audio Transcription & Sentiment Analysis</h1>
-    <p>Click the button below to start recording your voice. The audio will be transcribed and analyzed for sentiment.</p>
 
+    <h1>Book Q&A with Voice and Gemini</h1>
+    <p>Upload a book and ask questions using your voice. The app will respond with audio and text!</p>
+
+    <!-- Recording Controls -->
     <div id="controls">
-        <button id="record">Start Recording</button>
-        <button id="stop" style="display:none;">Stop Recording</button>
-        <p id="timer">Press 'Start Recording' to begin.</p>
+        <button id="record">🎤 Start Recording</button>
+        <button id="stop" style="display:none;">🛑 Stop</button>
+        <p id="timer">Press "Start Recording" to begin.</p>
     </div>
 
+    <!-- PDF Upload -->
+    <form action="/upload_pdf" method="post" enctype="multipart/form-data">
+        <h3>Upload a PDF Book</h3>
+        <input type="file" name="book" accept=".pdf" required>
+        <button type="submit">Upload Book</button>
+    </form>
+
+    <!-- Results Section -->
     {% if results %}
-<div id="results">
-    <h2>All Transcripts & Sentiment Results</h2>
-    {% for filename, content in results %}
-        <div style="margin: 20px auto; padding: 15px; background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 8px; max-width: 800px; text-align: left;">
+    <div id="results">
+        <h2>Transcripts & Audio Responses</h2>
+        {% for filename, content, audio_file in results %}
+        <div class="result-block">
             <h4>{{ filename }}</h4>
             <pre>{{ content }}</pre>
+            {% if audio_file %}
+                <audio controls style="margin-top:10px;">
+                    <source src="/results/{{ audio_file }}" type="audio/mp3">
+                    Your browser does not support the audio element.
+                </audio>
+            {% endif %}
         </div>
-    {% endfor %}
-</div>
-{% else %}
-<p>No analysis results yet. Upload an audio file to get started.</p>
-{% endif %}
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="margin-top: 30px;">No analysis results yet. Upload a PDF and ask your first question!</p>
+    {% endif %}
 
-    
-
-    <script src="script.js"></script>
+    <script src="/script.js"></script>
 </body>
 </html>
